@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static '/doctor.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Doctor Dashboard</h1>
+            <p>Manage your medical practice efficiently</p>
+        </div>
+        
+        <div class="header-actions">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-pic-container">
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-pic">
+                {% else %}
+                    <div class="profile-initials">
+                        {{ user.first_name.0 }}{{ user.last_name.0 }}
+                    </div>
+                {% endif %}
+            </div>
+            <h2 class="profile-name">Dr. {{ user.first_name }} {{ user.last_name }}</h2>
+            <p class="profile-title">{{ user.get_user_type_display }}</p>
+            
+            <div class="stats-container">
+                <div class="stat-card stat-1">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Patients Today</div>
+                </div>
+                
+                <div class="stat-card stat-2">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Appointments</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-card">
+            <div class="card-header">
+                <i class="fas fa-user-md"></i>
+                <h2>Professional Information</h2>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ user.username }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ user.email }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">User Type</div>
+                    <div class="info-value">{{ user.get_user_type_display }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Address</div>
+                    <div class="info-value">{{ user.address_line1 }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">City</div>
+                    <div class="info-value">{{ user.city }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">State</div>
+                    <div class="info-value">{{ user.state }}</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Pincode</div>
+                    <div class="info-value">{{ user.pincode }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add staggered animation to info items
+        document.addEventListener('DOMContentLoaded', function() {
+            const infoItems = document.querySelectorAll('.info-item');
+            infoItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+                item.style.animation = 'fadeInUp 0.6s ease forwards';
+                item.style.opacity = '0';
+            });
+            
+            // Add hover effect to profile picture
+            const profilePicContainer = document.querySelector('.profile-pic-container');
+            if (profilePicContainer) {
+                profilePicContainer.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05) rotate(5deg)';
+                });
+                
+                profilePicContainer.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
